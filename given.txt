@@ -1,0 +1,103 @@
+Project Goal:
+Build a Task Manager CLI app using Python, with
+capabilities like adding, viewing, updating, deleting, and savingtasks to a file using Object-Oriented Programming (OOP).
+
+Day 1: Python Basics Refresher + CLI Setup
+1. ✅ Create a Python file task_manager.py.
+2. ✅ Learn to print to the console and take input() from users.
+3. ✅ Define a Task class with title, description, and status.
+4. ✅ Initialize a list of tasks and print them in a loop.
+5. ✅ Add a simple menu to choose between: Add Task / View Tasks / Quit.
+
+Sample run:
+
+PS C:\Users\jacqu\Desktop\intern\Week2> python -u "c:\Users\jacqu\Desktop\intern\Week2\Day1\task_manager.py"
+Choose from the following menu:
+1. View the tasks.
+2. Add a task.
+3. Quit
+
+User Choice: 0
+
+Invalid choice. Please choose a valid option.
+Choose from the following menu:
+1. View the tasks.
+2. Add a task.
+3. Quit
+
+User Choice: w
+
+User choice must be an integer.
+Choose from the following menu:
+1. View the tasks.
+2. Add a task.
+3. Quit
+
+User Choice: 1
+
+No tasks available.
+
+Choose from the following menu:
+1. View the tasks.
+2. Add a task.
+3. Quit
+
+User Choice: 2
+
+Adding a new task.
+
+Enter task name: Task manager project python
+
+Enter task description: Write inital class and test it
+Choose from the following menu:
+1. View the tasks.
+2. Add a task.
+3. Quit
+
+User Choice: 2
+
+Adding a new task.
+
+Enter task name: ClickUp
+
+Enter task description: Get familiar with click up and how to use it
+Choose from the following menu:
+1. View the tasks.
+2. Add a task.
+3. Quit
+
+User Choice: 2
+
+Adding a new task.
+
+Enter task name: Gym
+
+Enter task description: Warm up, uper body, cardio
+Choose from the following menu:
+1. View the tasks.
+2. Add a task.
+3. Quit
+
+User Choice: 1
+
+Task: Task manager project python
+Description: Write inital class and test it
+Status: Task Assigned.
+
+Task: ClickUp
+Description: Get familiar with click up and how to use it
+Status: Task Assigned.
+
+Task: Gym
+Description: Warm up, uper body, cardio
+Status: Task Assigned.
+Choose from the following menu:
+1. View the tasks.
+2. Add a task.
+3. Quit
+
+User Choice: 3
+
+Goodbye!
+
+PS C:\Users\jacqu\Desktop\intern\Week2>
