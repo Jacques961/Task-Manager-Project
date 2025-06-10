@@ -1,11 +1,16 @@
+import datetime 
 class Task():
-    def __init__(self, title: str = None, description: str = None):
-        self.setTask(title, description)
+    def __init__(self, title: str = None, description: str = None, duedate: datetime = datetime.datetime.today(), priority: str = None, category: str = None):
+        self.setTask(title, description, duedate, priority, category)
         self.__status = 'A' # not set by the user when first adding the task
     
-    def setTask(self, title: str, description: str):
+    def setTask(self, title: str, description: str, duedate: datetime, priority: str, category: str):
         self.setTitle(title)
         self.setDescription(description)
+        self.setDuedate(duedate)
+        self.setPriority(priority)
+        self.setCategory(category)
+        
         
     def setTitle(self, title: str):
         if not title is None:
@@ -27,6 +32,24 @@ class Task():
         else:
             self.__status = 'A'
     
+    def setDuedate(self, duedate: datetime):
+        if not duedate is None:
+            self.__duedate = duedate
+        else:
+            self.__duedate = datetime.datetime.today()
+    
+    def setPriority(self, priority: str):
+        if priority in ['L', 'M', 'H']:
+            self.__priority = priority
+        else:
+            self.__priority = 'M'
+    
+    def setCategory(self, category: str):
+        if category in ['Work', 'Personal', 'Shopping', 'Other']:
+            self.__category = category
+        else:
+            self.__category = 'Other'
+            
     def getTitle(self):
         return self.__title
     
@@ -40,10 +63,25 @@ class Task():
             return 'Task Completed.'
         if self.__status == 'OD':
             return 'Task Overdue.'
+        
+    def getDuedate(self):
+        return self.__duedate
+    
+    def getPriority(self):
+        if self.__priority == 'L':
+            return "Low"
+        if self.__priority == 'M':
+            return 'Medium'
+        if self.__priority == 'H':
+            return 'High'
+        
+    def getCategory(self):
+        return self.__category
     
     def __str__(self):
         return self.__repr__()
        
     
     def __repr__(self):
-         return ('\nTask: ' + (str)(self.getTitle()) + '\nDescription: ' + (str)(self.getDescription()) + '\nStatus: ' + (str)(self.getStatus()))
+         return ((str)(self.getTitle()) + '\nDescription: ' + (str)(self.getDescription()) 
+                 + '\nDueDate: ' + (str)(self.getDuedate()) + '\nPriority: ' + self.getPriority() + '\nCategory: ' + self.getCategory() + '\nStatus: ' + (str)(self.getStatus()) + '\n')
