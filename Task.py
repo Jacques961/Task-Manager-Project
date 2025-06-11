@@ -1,8 +1,8 @@
 import datetime 
 class Task():
-    def __init__(self, title: str = None, description: str = None, duedate: datetime = datetime.datetime.today(), priority: str = None, category: str = None):
+    def __init__(self, title: str = None, description: str = None, duedate: datetime = datetime.datetime.today(), priority: str = None, category: str = None, status: str = 'A'):
         self.setTask(title, description, duedate, priority, category)
-        self.__status = 'A' # not set by the user when first adding the task
+        self.__status = status # not set by the user when first adding the task
     
     def setTask(self, title: str, description: str, duedate: datetime, priority: str, category: str):
         self.setTitle(title)
@@ -58,11 +58,11 @@ class Task():
     
     def getStatus(self):
         if self.__status == 'A':
-            return 'Task Assigned.'
+            return 'Assigned.'
         if self.__status == 'C':
-            return 'Task Completed.'
+            return 'Completed.'
         if self.__status == 'OD':
-            return 'Task Overdue.'
+            return 'Overdue.'
         
     def getDuedate(self):
         return self.__duedate
@@ -84,4 +84,4 @@ class Task():
     
     def __repr__(self):
          return ((str)(self.getTitle()) + '\nDescription: ' + (str)(self.getDescription()) 
-                 + '\nDueDate: ' + (str)(self.getDuedate()) + '\nPriority: ' + self.getPriority() + '\nCategory: ' + self.getCategory() + '\nStatus: ' + (str)(self.getStatus()) + '\n')
+                 + '\nDueDate: ' + (str)(self.getDuedate()) + '\nPriority: ' + self.getPriority() + '\nCategory: ' + self.getCategory() + '\nStatus: ' + (str)(self.getStatus()) + '\n\n')

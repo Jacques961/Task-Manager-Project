@@ -22,6 +22,7 @@ class ToDoList():
     def addTask(self, task: Task):
         self.__todolist.append(task)
         print("Task added.")
+        return True
     
     def removeTask(self, index: int):
         if index < 0 or index > len(self.__todolist):
@@ -29,6 +30,7 @@ class ToDoList():
         else:
             del self.__todolist[index-1]
             print("Task deleted.")
+            return True
     
     def markTaskDone(self, index: int):
         if index < 0 or index > len(self.__todolist):
@@ -36,14 +38,17 @@ class ToDoList():
         else:
             self.__todolist[index-1].setStatus('C')
             print("Task marked as done.")
+            return True
             
     def checkIfOverdue(self, index: int):
         if index < 0 or index > len(self.__todolist):
             raise IndexError("Index out of range.")
         else:
             task = self.__todolist[index-1]
-            if task.getDuedate() < datetime.datetime.today() and task.getStatus() == 'Task Assigned.':
+            if task.getDuedate() < datetime.datetime.today() and task.getStatus() == 'Assigned.':
                 print("Task is overdue.")
+                task.setStatus('OD')
+                return True
             else:
                 print("Task is not overdue.")
     
@@ -83,9 +88,17 @@ class ToDoList():
             
             
             print('Task updated.')
-        
+            return True
+    
+    def strWithIndex(self, index: int):
+        if index < 0 or index > len(self.__todolist):
+            raise IndexError("Index out of range.")
+        else:
+            task = self.__todolist[index-1]
+            return('Task ' + (str)(index) + ': ' + task.__str__())
+            
     def __str__(self):
-        i = 1
-        for task in self.__todolist:
-            print('Task ' + (str)(i) + ': ' + task.__str__())
-            i += 1
+        out = ' '
+        for i, task in enumerate(self.__todolist, 1):
+            out += ('Task ' + (str)(i) + ': ' + task.__str__())
+        return out

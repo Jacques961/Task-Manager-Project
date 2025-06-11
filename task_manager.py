@@ -2,9 +2,35 @@ from Task import Task
 from ToDoList import ToDoList
 import re
 import datetime
+import os
+from itertools import islice
 
 # intialize a list of Task
+path = r'C:\Users\jacqu\Desktop\intern\Week2\Day3\tasks.txt'
 tasks = ToDoList()
+if not os.path.exists(path):
+    with open('tasks.txt', 'w') as f:
+	    pass
+ 
+else:
+    with open(path, 'r') as f:
+        while True:
+            lines = list(islice(f, 7))
+            if not lines:
+                break
+            taskName = lines[0].split(': ')[1].strip()
+            taskDescripiton = lines[1].split(': ')[1].strip()
+            date = lines[2].split(': ')[1].strip()
+            taskDuedate = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
+            taskPriority = lines[3].split(': ')[1][0].strip()
+            taskCategory = lines[4].split(': ')[1].strip()
+            if lines[5].split(': ')[1][0] == 'O':
+                taskStatus = 'OD'
+            else:
+                taskStatus = lines[5].split(': ')[1][0].strip()
+            
+            task = Task(taskName,taskDescripiton,taskDuedate,taskPriority,taskCategory,taskStatus)
+            tasks.addTask(task)
 
 # Menu
 def menu():
@@ -22,6 +48,7 @@ def menu():
     
 
 def main():
+    global tasks
     while True:
         print(menu())
         
@@ -44,7 +71,7 @@ def main():
             if not tasks:
                 print('There are no tasks in the list.')
             else:
-                tasks.__str__()
+                print(tasks.__str__())
                     
         if choice == 3:
             print('\nAdding a new task.')
@@ -122,7 +149,12 @@ def main():
                 taskcategory = input('\nInvalid category. Please enter Work, Personal, Shopping, or Other or 0 to go back: ')
             task.setCategory(taskcategory)
             
-            tasks.addTask(task)
+            added  = tasks.addTask(task)
+            
+            # add task to the tasks file
+            if added == True:
+                with open('tasks.txt', 'a') as f:
+                    f.write(tasks.strWithIndex(tasks.getTasksNumber()))
         
         if choice == 4:
             print('\nDeleting a task.')
@@ -131,9 +163,22 @@ def main():
             while not re.match(r"^[0-9]+$", index) or ((int)(index) < 0 or (int)(index) > tasks.getTasksNumber()):
                 index = input('\nInvalid index. Please enter an integer index in the range of indecies: ')
                 
-            
             index = (int)(index)
-            tasks.removeTask(index)
+            deleted = tasks.removeTask(index)
+            
+            # deleting the task from the file
+            # never modify a list while iterating over it
+            # if deleted:
+            #     with open('tasks.txt', 'r') as f:
+            #         lines = f.readlines()
+            #     start = (index - 1) * 7
+            #     del lines[start:start+7]
+            #     with open('tasks.txt', 'w') as f:
+            #         f.writelines(lines)
+            
+            if deleted:
+                with open('tasks.txt', 'w') as f:
+                    f.write(tasks.__str__())
         
         if choice == 5:
             print('\nUpdating a task.')
@@ -144,8 +189,12 @@ def main():
                 
             
             index = (int)(index)
-            tasks.updateTask(index)
-        
+            updated = tasks.updateTask(index)
+            
+            if updated:
+                with open('tasks.txt', 'w') as f:
+                    f.write(tasks.__str__())
+                    
         if choice == 6:
             index = input('Enter the index of the task to check: ')
             
@@ -153,7 +202,11 @@ def main():
                 index = input('\nInvalid index. Please enter an integer index in the range of indecies: ')
                 
             index = (int)(index)
-            tasks.checkIfOverdue(index)
+            overdue = tasks.checkIfOverdue(index)
+            
+            if overdue:
+                with open('tasks.txt', 'w') as f:
+                    f.write(tasks.__str__())
         
         if choice == 7:
             index = input('Enter the index of the task to mark: ')
@@ -162,15 +215,21 @@ def main():
                 index = input('\nInvalid index. Please enter an integer index in the range of indecies: ')
             
             index = (int)(index)
-            tasks.markTaskDone(index)
+            marked  = tasks.markTaskDone(index)
             
             c = input("\nDo you want to delete task done? ('Y' for yes 'N' for no): ")
             while c.lower() not in ['y', 'n']:
                 c = input("\nInvalid choice. Choose 'Y' for yes 'N' for no: ")
                 
             if c in ['y', 'Y']:
-                tasks.removeTask(index)
-            
+                deleted = tasks.removeTask(index)
+                if deleted:
+                    with open('tasks.txt', 'w') as f:
+                        f.write(tasks.__str__())
+            else:
+                if marked:
+                    with open('tasks.txt', 'w') as f:
+                        f.write(tasks.__str__())
             
         if choice == 0:
             print('\nGoodbye!\n')

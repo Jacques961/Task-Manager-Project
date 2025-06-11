@@ -1,0 +1,70 @@
+ Task 1: Check emails
+Description: Requires internet access.
+DueDate: 2025-06-06 00:00:00
+Priority: High
+Category: Personal
+Status: Completed.
+
+Task 2: Schedule meeting
+Description: Can be delayed but should be done soon.
+DueDate: 2025-06-05 00:00:00
+Priority: Medium
+Category: Work
+Status: Completed.
+
+Task 3: Workout session
+Description: This task must be completed before the deadline.
+DueDate: 2025-06-08 00:00:00
+Priority: Low
+Category: Shopping
+Status: Overdue.
+
+Task 4: Schedule meeting
+Description: Remember to complete this on time.
+DueDate: 2025-06-13 00:00:00
+Priority: Low
+Category: Shopping
+Status: Assigned.
+
+Task 5: Go for a walk
+Description: Can be done during break time.
+DueDate: 2025-06-10 00:00:00
+Priority: High
+Category: Other
+Status: Overdue.
+
+Task 6: Fix the bike
+Description: Can be done during break time.
+DueDate: 2025-06-21 00:00:00
+Priority: Low
+Category: Personal
+Status: Assigned.
+
+Task 7: Workout session
+Description: This task must be completed before the deadline.
+DueDate: 2025-06-15 00:00:00
+Priority: High
+Category: Work
+Status: Completed.
+
+Task 8: Review code
+Description: Can be delayed but should be done soon.
+DueDate: 2025-06-11 00:00:00
+Priority: High
+Category: Personal
+Status: Overdue.
+
+Task 9: Call mom
+Description: Can be delayed but should be done soon.
+DueDate: 2025-06-10 00:00:00
+Priority: Low
+Category: Shopping
+Status: Completed.
+
+Task 10: Review code
+Description: This task must be completed before the deadline.
+DueDate: 2025-06-13 00:00:00
+Priority: Medium
+Category: Work
+Status: Completed.
+
