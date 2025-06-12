@@ -1,243 +1,190 @@
 from Task import Task
-from ToDoList import ToDoList
+from user import user
 import re
 import datetime
 import os
-from itertools import islice
-
-# intialize a list of Task
-path = r'C:\Users\jacqu\Desktop\intern\Week2\Day3\tasks.txt'
-tasks = ToDoList()
-if not os.path.exists(path):
-    with open('tasks.txt', 'w') as f:
-	    pass
- 
-else:
-    with open(path, 'r') as f:
-        while True:
-            lines = list(islice(f, 7))
-            if not lines:
-                break
-            taskName = lines[0].split(': ')[1].strip()
-            taskDescripiton = lines[1].split(': ')[1].strip()
-            date = lines[2].split(': ')[1].strip()
-            taskDuedate = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
-            taskPriority = lines[3].split(': ')[1][0].strip()
-            taskCategory = lines[4].split(': ')[1].strip()
-            if lines[5].split(': ')[1][0] == 'O':
-                taskStatus = 'OD'
-            else:
-                taskStatus = lines[5].split(': ')[1][0].strip()
+# adding the users code
+usersInfo = []
+def registerUser():
+        path = r'C:\Users\jacqu\Desktop\intern\Week2\Day4\users.txt'
+        print('You are creating an account.....')
+        userName = input("Enter your username: ")
+        while not userName:
+            userName = input('User name is required: ')
             
-            task = Task(taskName,taskDescripiton,taskDuedate,taskPriority,taskCategory,taskStatus)
-            tasks.addTask(task)
+        password = input("Enter your password (Must be 5 characters, with combination of letters, characters,symbols): ")
+        pattern = r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$'
+            
+        while len(password) != 5 and not re.match(pattern, password):
+            password = input('Must be 5 characters, with combination of letters, characters,symbols: ')
+            
+        newUser = user(userName,password)
+        usersInfo.append(newUser)
+        
+        with open(path, 'a') as f:
+            f.write('User ' + (str)(userName) + ' Password ' + (str)(password) + '\n')    
+        return newUser
 
+def users():
+    path = r'C:\Users\jacqu\Desktop\intern\Week2\Day4\users.txt'
+    if not os.path.exists(path):
+        with open(path, 'w') as f:
+            pass
+    with open(path, 'r') as f:
+        if not f.read(1):
+            print('No users yet.\nYou have to register a user to use the app.')
+            result = registerUser()
+            return result
+        else:
+            userName = input('Log in.\nEnter you username: ')
+            while not userName:
+                userName = input('User name is required: ')
+            
+            with open(path, 'r') as f:
+                for line in f:
+                    if len(line)!= 0 and line.split()[1] == userName:
+                        password = input('Enter your password: ')
+                        if line.split()[3] == password:
+                            print('Welcome ' + userName)
+                            result = user(userName, password)
+                            return result
+                        else:
+                            while password != line.split()[3]:
+                                password = input('Incorrect password. Please try again: ')
+                            print('Welcome ' + userName)
+                            result = user(userName, password)
+                            return
+                    
+                print('User not found')
+                result = registerUser()
+                return result
+                            
 # Menu
 def menu():
     return(
         '\nChoose from the following menu:\n'
-        + '1. Create a to do list\n'
-        + '2. View the tasks.\n'
-        + '3. Add a task.\n'
-        + '4. Delete a task.\n'
-        + '5. Update a task\n'
-        + '6. Check if task is overdue\n'
-        + '7. Mark task as completed\n'
+        + '1. View the tasks.\n'
+        + '2. Add a task.\n'
+        + '3. Delete a task.\n'
+        + '4. Update a task\n'
+        + '5. Check if task is overdue\n'
+        + '6. Mark task as completed\n'
+        + '7. Go back to log in\n'
         + '0. Quit\n'
     )
     
 
 def main():
-    global tasks
     while True:
-        print(menu())
+        userName = users()
+            
+        userName.loadTasks()
         
-        choice = input('User Choice: ')
-        
-        if not re.match(r"^[0-9]+$", choice):
-            print('\nUser choice must be an integer.')
-            continue
-        
-        choice = int(choice)
-        
-        if choice not in [0, 1, 2, 3, 4, 5, 6, 7]:
-            print('\nInvalid choice. Please choose a valid option.')
-        
-        if choice == 1:
-            tasks = ToDoList()
-            print('You have created a to do list with no tasks in it.')
+        while True:
+            print(menu())
             
-        if choice == 2:
-            if not tasks:
-                print('There are no tasks in the list.')
-            else:
-                print(tasks.__str__())
-                    
-        if choice == 3:
-            print('\nAdding a new task.')
+            choice = input('User Choice: ')
             
-            task = Task()
-            taskName = input('\nEnter task name or 0 to go back: ')
-            
-            if taskName == '0':
+            if not re.match(r"^[0-9]+$", choice):
+                print('\nUser choice must be an integer.')
                 continue
             
-            while len(taskName) == 0:
-                if taskName == '0':
-                    break
-                if len(taskName) == 0:
-                    taskName = input('Task name cannot be empty. Retype the task name or 0 to go back: ')
-                    
-            if taskName == '0':
-                continue
-                    
-            task.setTitle(taskName)
+            choice = int(choice)
             
-            taskDescription = input('\nEnter task description or 0 to go back: ')
+            if choice not in [0, 1, 2, 3, 4, 5, 6, 7]:
+                print('\nInvalid choice. Please choose a valid option.')
             
-            if taskDescription == '0':
-                continue
-            
-            while len(taskDescription) == 0:
-                if taskDescription == '0':
-                    break
-                if len(taskDescription) == 0:
-                     taskName = input('Task description cannot be empty. Retype the task description or 0 to go back: ')
-            
-            if taskDescription == '0':
-                continue
-            
-            task.setDescription(taskDescription)
-            
-            taskduedate = input('\nEnter task due date (date format YYYY-MM-DD) or 0 to go back: ')
-            
-            if taskduedate == 0:
-                continue 
-            
-            while True:
-                if taskduedate == 0:
-                    break
-                try:
-                    duedate = datetime.datetime.strptime(taskduedate, "%Y-%m-%d")
-                    task.setDuedate(duedate)
-                    break
-                except ValueError:
-                    taskduedate = input("\nInvalid date format. Please enter the date in YYYY-MM-DD format or 0 to go back: ")
-            
-            if taskduedate == 0:
-                continue
-            
-            taskpriority = input('\nEnter task priority (L for Low, M for Medium, H for High) or 0 to go back: ')
-            
-            if taskpriority == '0':
-                continue
-            
-            while taskpriority not in ['L', 'M', 'H']:
-                if taskpriority == '0':
-                    break
-                taskpriority = input('\nInvalid priority. Please enter L for Low, M for Medium, or H for High or 0 to go back: ')
-            task.setPriority(taskpriority)
-            
-            taskcategory = input('\nEnter task category (Work, Personal, Shopping, Other) or 0 to go back: ')
-            
-            if taskcategory == '0':
-                continue
-            
-            while taskcategory.lower() not in ['work', 'personal', 'shopping', 'other']:
-                if taskcategory == '0':
-                    break
-                taskcategory = input('\nInvalid category. Please enter Work, Personal, Shopping, or Other or 0 to go back: ')
-            task.setCategory(taskcategory)
-            
-            added  = tasks.addTask(task)
-            
-            # add task to the tasks file
-            if added == True:
-                with open('tasks.txt', 'a') as f:
-                    f.write(tasks.strWithIndex(tasks.getTasksNumber()))
-        
-        if choice == 4:
-            print('\nDeleting a task.')
-            index = input('Enter the index of the task to delete: ')
-            
-            while not re.match(r"^[0-9]+$", index) or ((int)(index) < 0 or (int)(index) > tasks.getTasksNumber()):
-                index = input('\nInvalid index. Please enter an integer index in the range of indecies: ')
+
+            if choice == 1:
+                if userName.getList().getTasksNumber() == 0:
+                    print('There are no tasks in the list.')
+                else:
+                    print(userName.__str__())
+                        
+            if choice == 2:
+                # add task to the tasks file
+                added = userName.getList().addTask()
+                if added == True:
+                    userName.saveTask()
+                                
+            if choice == 3:
+                print('\nDeleting a task.')
+                index = input('Enter the index of the task to delete: ')
                 
-            index = (int)(index)
-            deleted = tasks.removeTask(index)
-            
-            # deleting the task from the file
-            # never modify a list while iterating over it
-            # if deleted:
-            #     with open('tasks.txt', 'r') as f:
-            #         lines = f.readlines()
-            #     start = (index - 1) * 7
-            #     del lines[start:start+7]
-            #     with open('tasks.txt', 'w') as f:
-            #         f.writelines(lines)
-            
-            if deleted:
-                with open('tasks.txt', 'w') as f:
-                    f.write(tasks.__str__())
-        
-        if choice == 5:
-            print('\nUpdating a task.')
-            index = input('Enter the index of the task to update: ')
-            
-            while not re.match(r"^[0-9]+$", index) or ((int)(index) < 0 or (int)(index) > tasks.getTasksNumber()):
-                index = input('\nInvalid index. Please enter an integer index in the range of indecies: ')
-                
-            
-            index = (int)(index)
-            updated = tasks.updateTask(index)
-            
-            if updated:
-                with open('tasks.txt', 'w') as f:
-                    f.write(tasks.__str__())
+                while not re.match(r"^[0-9]+$", index) or ((int)(index) < 0 or (int)(index) > userName.getList().getTasksNumber()):
+                    index = input('\nInvalid index. Please enter an integer index in the range of indecies: ')
                     
-        if choice == 6:
-            index = input('Enter the index of the task to check: ')
-            
-            while not re.match(r"^[0-9]+$", index) or ((int)(index) < 0 or (int)(index) > tasks.getTasksNumber()):
-                index = input('\nInvalid index. Please enter an integer index in the range of indecies: ')
+                index = (int)(index)
+                deleted = userName.getList().removeTask(index)
                 
-            index = (int)(index)
-            overdue = tasks.checkIfOverdue(index)
-            
-            if overdue:
-                with open('tasks.txt', 'w') as f:
-                    f.write(tasks.__str__())
-        
-        if choice == 7:
-            index = input('Enter the index of the task to mark: ')
-            
-            while not re.match(r"^[0-9]+$", index) or ((int)(index) < 0 or (int)(index) > tasks.getTasksNumber()):
-                index = input('\nInvalid index. Please enter an integer index in the range of indecies: ')
-            
-            index = (int)(index)
-            marked  = tasks.markTaskDone(index)
-            
-            c = input("\nDo you want to delete task done? ('Y' for yes 'N' for no): ")
-            while c.lower() not in ['y', 'n']:
-                c = input("\nInvalid choice. Choose 'Y' for yes 'N' for no: ")
+                # deleting the task from the file
+                # never modify a list while iterating over it
+                # if deleted:
+                #     with open('tasks.txt', 'r') as f:
+                #         lines = f.readlines()
+                #     start = (index - 1) * 7
+                #     del lines[start:start+7]
+                #     with open('tasks.txt', 'w') as f:
+                #         f.writelines(lines)
                 
-            if c in ['y', 'Y']:
-                deleted = tasks.removeTask(index)
                 if deleted:
-                    with open('tasks.txt', 'w') as f:
-                        f.write(tasks.__str__())
-            else:
-                if marked:
-                    with open('tasks.txt', 'w') as f:
-                        f.write(tasks.__str__())
+                    userName.saveTasks()
             
-        if choice == 0:
-            print('\nGoodbye!\n')
-            break
+            if choice == 4:
+                print('\nUpdating a task.')
+                index = input('Enter the index of the task to update: ')
+                
+                while not re.match(r"^[0-9]+$", index) or ((int)(index) < 0 or (int)(index) > userName.getList().getTasksNumber()):
+                    index = input('\nInvalid index. Please enter an integer index in the range of indecies: ')
+                    
+                
+                index = (int)(index)
+                updated = userName.getList().updateTask(index)
+                
+                if updated:
+                    userName.saveTasks()
+                        
+            if choice == 5:
+                index = input('Enter the index of the task to check: ')
+                
+                while not re.match(r"^[0-9]+$", index) or ((int)(index) < 0 or (int)(index) > userName.getList().getTasksNumber()):
+                    index = input('\nInvalid index. Please enter an integer index in the range of indecies: ')
+                    
+                index = (int)(index)
+                overdue = userName.getList().checkIfOverdue(index)
+                
+                if overdue:
+                    userName.saveTasks()
+            
+            if choice == 6:
+                index = input('Enter the index of the task to mark: ')
+                
+                while not re.match(r"^[0-9]+$", index) or ((int)(index) < 0 or (int)(index) > userName.getList().getTasksNumber()):
+                    index = input('\nInvalid index. Please enter an integer index in the range of indecies: ')
+                
+                index = (int)(index)
+                marked  = userName.getList().markTaskDone(index)
+                
+                c = input("\nDo you want to delete task done? ('Y' for yes 'N' for no): ")
+                while c.lower() not in ['y', 'n']:
+                    c = input("\nInvalid choice. Choose 'Y' for yes 'N' for no: ")
+                    
+                if c in ['y', 'Y']:
+                    deleted = userName.getList().removeTask(index)
+                    if deleted:
+                        userName.saveTasks()
+                else:
+                    if marked:
+                        userName.saveTasks()
+                        
+            if choice == 7:
+                break
+            
+            if choice == 0:
+                print('\nGoodbye!\n')
+                return
             
             
 
 if __name__ == "__main__":
     main()
-
-

@@ -1,17 +1,23 @@
 import datetime 
 class Task():
-    def __init__(self, title: str = None, description: str = None, duedate: datetime = datetime.datetime.today(), priority: str = None, category: str = None, status: str = 'A'):
-        self.setTask(title, description, duedate, priority, category)
+    def __init__(self, id: int, title: str = None, description: str = None, duedate: datetime = datetime.datetime.today(), priority: str = None, category: str = None, status: str = 'A'):
+        self.setTask(id,title, description, duedate, priority, category)
         self.__status = status # not set by the user when first adding the task
     
-    def setTask(self, title: str, description: str, duedate: datetime, priority: str, category: str):
+    def setTask(self,id: int, title: str, description: str, duedate: datetime, priority: str, category: str):
+        self.setId(id)
         self.setTitle(title)
         self.setDescription(description)
         self.setDuedate(duedate)
         self.setPriority(priority)
         self.setCategory(category)
         
-        
+    def setId(self, id: int):
+        self.__id = id
+    
+    def getId(self):
+        return self.__id
+    
     def setTitle(self, title: str):
         if not title is None:
             self.__title = title
@@ -45,7 +51,7 @@ class Task():
             self.__priority = 'M'
     
     def setCategory(self, category: str):
-        if category in ['Work', 'Personal', 'Shopping', 'Other']:
+        if category in ['work', 'personal', 'shopping', 'other']:
             self.__category = category
         else:
             self.__category = 'Other'
@@ -84,4 +90,4 @@ class Task():
     
     def __repr__(self):
          return ((str)(self.getTitle()) + '\nDescription: ' + (str)(self.getDescription()) 
-                 + '\nDueDate: ' + (str)(self.getDuedate()) + '\nPriority: ' + self.getPriority() + '\nCategory: ' + self.getCategory() + '\nStatus: ' + (str)(self.getStatus()) + '\n\n')
+                 + '\nDueDate: ' + (str)(self.getDuedate()) + '\nPriority: ' + self.getPriority() + '\nCategory: ' + self.getCategory() + '\nStatus: ' + (str)(self.getStatus()))
