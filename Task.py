@@ -40,9 +40,10 @@ class Task():
     
     def setDuedate(self, duedate: datetime):
         if not duedate is None:
-            self.__duedate = duedate
-        else:
-            self.__duedate = datetime.datetime.today()
+            if duedate < datetime.date.today():
+                self.__duedate = datetime.datetime.today()
+            else:
+                self.__duedate = datetime.datetime.today()
     
     def setPriority(self, priority: str):
         if priority in ['L', 'M', 'H']:

@@ -26,7 +26,7 @@ class user():
         if password == None:
             self.__password = None
         else:
-            self.__passsword = password
+            self.__password = password
     
     def getName(self):
         return self.__name
@@ -34,13 +34,8 @@ class user():
     def getPassword(self):
         return self.__password
     
-    def __str__(self):
-        return ('User: ' + (str)(self.getName())
-                + '\nHas the following tasks:\n' + '_______________________________\n'
-                + self.__list.__str__())
-
     def loadTasks(self):
-        path = r'C:\Users\jacqu\Desktop\intern\Week2\Day4'
+        path = r'C:\Users\jacqu\Desktop\intern\Week2\Day5'
         path = os.path.join(path, self.getName() + '.txt')
         if not os.path.exists(path):
             with open(path, 'w') as f:
@@ -70,9 +65,19 @@ class user():
                         self.__list.addTaskFromFile(task)
                         
     def saveTasks(self):
-        with open(os.path.join(r'C:\Users\jacqu\Desktop\intern\Week2\Day4', self.getName() + '.txt'), 'w') as f:
+        with open(os.path.join(r'C:\Users\jacqu\Desktop\intern\Week2\Day5', self.getName() + '.txt'), 'w') as f:
             f.write(self.__list.__str__())
     
     def saveTask(self):
-        with open(os.path.join(r'C:\Users\jacqu\Desktop\intern\Week2\Day4', self.getName() + '.txt'), 'a') as f:
+        with open(os.path.join(r'C:\Users\jacqu\Desktop\intern\Week2\Day5', self.getName() + '.txt'), 'a') as f:
             f.write('\n' + self.__list.strWithIndex(self.__list.getTasksNumber()))
+            
+    def clearTasksFromFile(self):
+         with open(os.path.join(r'C:\Users\jacqu\Desktop\intern\Week2\Day5', self.getName() + '.txt'), 'w') as f:
+             print("Tasks file cleared.")
+             pass
+            
+    def __str__(self):
+        return ('User: ' + (str)(self.getName())
+                + '\nHas the following tasks:\n' + '_______________________________\n'
+                + self.__list.__str__())

@@ -6,7 +6,7 @@ import os
 # adding the users code
 usersInfo = []
 def registerUser():
-        path = r'C:\Users\jacqu\Desktop\intern\Week2\Day4\users.txt'
+        path = r'C:\Users\jacqu\Desktop\intern\Week2\Day5\users.txt'
         print('You are creating an account.....')
         userName = input("Enter your username: ")
         while not userName:
@@ -26,7 +26,7 @@ def registerUser():
         return newUser
 
 def users():
-    path = r'C:\Users\jacqu\Desktop\intern\Week2\Day4\users.txt'
+    path = r'C:\Users\jacqu\Desktop\intern\Week2\Day5\users.txt'
     if not os.path.exists(path):
         with open(path, 'w') as f:
             pass
@@ -53,7 +53,7 @@ def users():
                                 password = input('Incorrect password. Please try again: ')
                             print('Welcome ' + userName)
                             result = user(userName, password)
-                            return
+                            return result
                     
                 print('User not found')
                 result = registerUser()
@@ -69,7 +69,10 @@ def menu():
         + '4. Update a task\n'
         + '5. Check if task is overdue\n'
         + '6. Mark task as completed\n'
-        + '7. Go back to log in\n'
+        + '7. Sort task by status\n'
+        + '8. Sort task by priority\n'
+        + '9. Clear all tasks\n'
+        + '10. Go back to log in\n'
         + '0. Quit\n'
     )
     
@@ -113,9 +116,27 @@ def main():
                 
                 while not re.match(r"^[0-9]+$", index) or ((int)(index) < 0 or (int)(index) > userName.getList().getTasksNumber()):
                     index = input('\nInvalid index. Please enter an integer index in the range of indecies: ')
+                
+                sure = input('Enter you password to confirm deletion or 0 to cancel: ')
+                userPass = userName.getPassword()
+                
+                while sure != '0':
+                    if sure == userPass:
+                        break
+                    while sure != userPass:
+                        if sure == '0':
+                            print('\nDeletion cancelled')
+                            break
+                        sure = input('\nIncorrect password. Please enter your password: ')
+                
+                if sure == '0':
+                    print('\nDeletion cancelled')
                     
-                index = (int)(index)
-                deleted = userName.getList().removeTask(index)
+                if sure == userPass:    
+                    index = (int)(index)
+                    deleted = userName.getList().removeTask(index)
+                    if deleted:
+                        userName.saveTasks()
                 
                 # deleting the task from the file
                 # never modify a list while iterating over it
@@ -127,9 +148,6 @@ def main():
                 #     with open('tasks.txt', 'w') as f:
                 #         f.writelines(lines)
                 
-                if deleted:
-                    userName.saveTasks()
-            
             if choice == 4:
                 print('\nUpdating a task.')
                 index = input('Enter the index of the task to update: ')
@@ -176,8 +194,57 @@ def main():
                 else:
                     if marked:
                         userName.saveTasks()
-                        
+            
             if choice == 7:
+                status = input("Enter 0 to sort the 'Completed', 1 to sort the 'Assigned', 2 to sort the 'Overdue': ")
+                while not re.match(r"^[0-9]+$", status):
+                    status = input("Choice must be 0 or 1 or 2: ")
+                
+                status = (int)(status)
+                
+                if status == 0:
+                    userName.getList().sortByStatus('Completed.')
+                elif status == 1:
+                    userName.getList().sortByStatus('Assigned.')
+                else:
+                    userName.getList().sortByStatus('Overdue.')
+            
+            if choice == 8:
+                status = input("Enter 0 to sort the 'Low', 1 to sort the 'Medium', 2 to sort the 'High': ")
+                while not re.match(r"^[0-9]+$", status):
+                    status = input("Choice must be 0 or 1 or 2: ")
+                
+                status = (int)(status)
+                
+                if status == 0:
+                    userName.getList().sortByPriority('Low')
+                elif status == 1:
+                    userName.getList().sortByPriority('Medium')
+                else:
+                    userName.getList().sortByPriority('High')
+            
+            if choice == 9:
+                sure = input('Enter you password to confirm deletion or 0 to cancel: ')
+                userPass = userName.getPassword()
+                
+                while sure != '0':
+                    if sure == userPass:
+                        break
+                    while sure != userPass:
+                        if sure == '0':
+                            print('\nDeletion cancelled')
+                            break
+                        sure = input('\nIncorrect password. Please enter your password: ')
+                
+                if sure == '0':
+                    print('\nDeletion cancelled')
+                    
+                if sure == userPass:    
+                    index = (int)(index)
+                    userName.getList().clearTasks()
+                    userName.clearTasksFromFile()
+                        
+            if choice == 10:
                 break
             
             if choice == 0:

@@ -168,7 +168,25 @@ class ToDoList():
             
             print('Task updated.')
             return True
+        
+    def sortByStatus(self,status: str):
+        i = 0
+        for task in self.__todolist:
+            if task.getStatus() == status:
+                print('Task ' + (str)(i) + ': ' + task.__str__() + '\n')
+                i += 1
+                
+    def sortByPriority(self,priority: str):
+        i = 0
+        for task in self.__todolist:
+            if task.getPriority() == priority:
+                print('Task ' + (str)(i) + ': '+ task.__str__() + '\n')
+                i += 1
     
+    def clearTasks(self):
+        self.__todolist.clear()
+        print('All tasks cleared.')
+                
     def strWithIndex(self, index: int):
         if index < 1 or index > len(self.__todolist):
             raise IndexError("Index out of range.")
@@ -181,4 +199,5 @@ class ToDoList():
         for i, task in enumerate(self.__todolist, 1):
             out += ('\nTask ' + (str)(i) + ': ' + task.__str__() + '\n')
         return out
+    
     
